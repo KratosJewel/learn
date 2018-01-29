@@ -3,7 +3,7 @@ project(learn)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(SOURCE_FILES chapter8.6.cpp)
+set(SOURCE_FILES chapter10.14.cpp)
 add_executable(learn ${SOURCE_FILES})
 
 #查找库并链接
