@@ -21,6 +21,11 @@ int main(int argc, char *argv[])
 
     listenfd = Socket(AF_INET, SOCK_STREAM, 0);
 
+    if (0 > listenfd)
+    {
+        return 1;
+    }
+
     memset(&servaddr, 0, sizeof(servaddr));
 
     servaddr.sin_family = AF_INET;
