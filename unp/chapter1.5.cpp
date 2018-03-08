@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     int listenfd = 0;
     int connfd = 0;
 
-    struct sockaddr_in servaddr;
+    sockaddr_in servaddr;
 
     char buf[256] = {0};
     time_t ticks;

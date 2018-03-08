@@ -32,9 +32,8 @@ void *thr_fn(void *arg)
 void *thr_fn2(void *arg)
 {
     printids("new thread2:");
+    //线程分离
     pthread_detach(pthread_self());
-    // 直接结束线程，参数可以通过 pthread_join 获得
-    // pthread_exit((void *) "test");
     return ((void *) 2);
 }
 
