@@ -15,6 +15,9 @@ int main(int argc, char *argv[])
     int connfd = 0;
 
     sockaddr_in servaddr;
+    sockaddr_in cliaddr;
+
+    socklen_t len = 0;
 
     char buf[256] = {0};
     time_t ticks;
@@ -44,12 +47,17 @@ int main(int argc, char *argv[])
 
     while (1)
     {
-        connfd = Accept(listenfd, NULL, NULL);
+        len = sizeof(cliaddr);
+
+        connfd = Accept(listenfd,(sockaddr *) &cliaddr,&len);
 
         if (0 > connfd)
         {
             return 1;
         }
+
+        std::cout << "connection from " << inet_ntop(AF_INET,&cliaddr.sin_addr,buf,sizeof(buf))
+                  << ",port " << ntohs(cliaddr.sin_port) << std::endl;
 
         ticks = time(NULL);
 

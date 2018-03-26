@@ -37,7 +37,7 @@ int Connect(int sockfd, const struct sockaddr *servaddr, unsigned int socket_len
 
 int Inet_pton(int domain, const std::string &host, in_addr *sin_addr)
 {
-    int result = inet_pton(AF_INET, host.c_str(), sin_addr);
+    int result = inet_pton(domain, host.c_str(), sin_addr);
 
     if (0 >= result)
     {
@@ -61,6 +61,14 @@ int Bind(int listenfd, const struct sockaddr *servaddr, unsigned int socket_len)
 
 int Listen(int listenfd, int count)
 {
+    char *pcount = NULL;
+    pcount = getenv("LISTENQ");
+
+    if (NULL != pcount)
+    {
+        count = atoi(pcount);
+    }
+
     int result = listen(listenfd, count);
 
     if (0 > result)

@@ -18,8 +18,6 @@ int main(int argc, char *argv[])
 
     char buf[256] = {0};
 
-    sockaddr_in servaddr;
-
     sockfd = Socket(AF_INET, SOCK_STREAM, 0);
 
     if (0 > sockfd)
@@ -27,6 +25,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    sockaddr_in servaddr;
     memset(&servaddr, 0, sizeof(servaddr));
 
     servaddr.sin_family = AF_INET;
