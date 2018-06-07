@@ -60,5 +60,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    shutdown(sockfd,SHUT_RDWR);
+
     return 1;
 }
