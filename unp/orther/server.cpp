@@ -25,6 +25,16 @@ int SetNonblocking(int fd)
     return old_option;
 }
 
+void ResetOneshot(int epollfd, int fd)
+{
+    struct epoll_event event;
+    event.data.ptr = 0;
+    event.data.fd = fd;
+    event.events = EPOLLET | EPOLLIN | EPOLLONESHOT;
+
+    epoll_ctl(epollfd,EPOLL_CTL_MOD, fd, &event);
+}
+
 void Addfd(int epollfd, int fd, bool enable_et)
 {
     struct epoll_event event;
@@ -35,7 +45,7 @@ void Addfd(int epollfd, int fd, bool enable_et)
     if (enable_et)
     {
         event.events |= EPOLLET;
-        //event.events |= EPOLLONESHOT;
+        event.events |= EPOLLONESHOT;
     }
 
     epoll_ctl(epollfd,EPOLL_CTL_ADD, fd, &event);
@@ -105,8 +115,11 @@ void et(epoll_event* events, int number, int epollfd, int listenfd)
 
                 if (0 > ret)
                 {
+                    // 对于非阻塞IO，下面的条件成立表示数据已经全部读取完毕，此后，epoll就能
+                    // 再次出发EPOLLIN事件，以驱动下一次读操作
                     if (EAGAIN == errno || EWOULDBLOCK == errno)
                     {
+                        ResetOneshot(epollfd,sockfd);
                         break;
                     }
                     close(sockfd);
@@ -123,6 +136,13 @@ void et(epoll_event* events, int number, int epollfd, int listenfd)
             }
         }
     }
+}
+
+void rest()
+{
+    static int i = 0;
+
+    std::cout << i++ <<std::endl;
 }
 
 int main(int argc, char *argv[])
